@@ -15,7 +15,15 @@ const taskSchema = new mongoose.Schema({
         default: false
     }
 }, {
-    timestamps: true // Adds 'createdAt' and 'updatedAt' fields automatically
+    timestamps: true, // Adds 'createdAt' and 'updatedAt' fields automatically
+    toJSON: {
+        transform: function(doc, ret) {
+            ret.id = ret._id.toString();
+            delete ret._id;
+            delete ret.__v;
+            return ret;
+        }
+    }
 });
 
 module.exports = mongoose.model('Task', taskSchema);

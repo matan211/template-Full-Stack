@@ -1,42 +1,24 @@
-// Simulating a database with an in-memory array
-let tasks = [
-    { id: '1', title: 'Learn React', description: 'Study hooks and components', completed: false },
-    { id: '2', title: 'Setup Node Server', description: 'Express and MVC structure', completed: true }
-];
+const Task = require('../models/task');
 
-// Helper to generate unique ID
-const generateId = () => Math.random().toString(36).substr(2, 9);
-
-// Get all tasks from the "database"
-exports.getAllTasks = () => {
-    return tasks;
+// Get all tasks from MongoDB
+exports.getAllTasks = async () => {
+    return await Task.find();
 };
 
-// Create a new task and add it to the array
-exports.createNewTask = (data) => {
-    const newTask = {
-        id: generateId(),
-        title: data.title,
-        description: data.description || '',
-        completed: false
-    };
-    tasks.push(newTask);
-    return newTask;
+// Create a new task in MongoDB
+exports.createNewTask = async (data) => {
+    const task = new Task(data);
+    return await task.save();
 };
 
-// Find task by ID and update fields
-exports.updateTaskById = (id, updates) => {
-    const index = tasks.findIndex(task => task.id === id);
-    if (index === -1) return null;
-
-    // Merge existing task with updates
-    tasks[index] = { ...tasks[index], ...updates };
-    return tasks[index];
+// Find task by ID and update it
+exports.updateTaskById = async (id, updates) => {
+    // { new: true } returns the updated document instead of the old one
+    return await Task.findByIdAndUpdate(id, updates, { new: true });
 };
 
-// Remove task from array
-exports.deleteTaskById = (id) => {
-    const initialLength = tasks.length;
-    tasks = tasks.filter(task => task.id !== id);
-    return tasks.length < initialLength; // Returns true if item was removed
+// Delete task by ID
+exports.deleteTaskById = async (id) => {
+    const result = await Task.findByIdAndDelete(id);
+    return result; // Returns the deleted document or null if not found
 };

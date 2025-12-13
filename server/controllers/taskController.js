@@ -1,56 +1,60 @@
 const taskService = require('../services/taskService');
 
 // Handle fetching all tasks
-exports.getTasks = (req, res) => {
+exports.getTasks = async (req, res) => {
     try {
-        const tasks = taskService.getAllTasks();
+        const tasks = await taskService.getAllTasks();
         res.status(200).json(tasks);
     } catch (error) {
-        res.status(500).json({ message: 'Error fetching tasks', error });
+        console.error('Error fetching tasks:', error);
+        res.status(500).json({ message: 'Error fetching tasks', error: error.message });
     }
 };
 
 // Handle creating a new task
-exports.createTask = (req, res) => {
+exports.createTask = async (req, res) => {
     try {
         const { title, description } = req.body;
         if (!title) {
             return res.status(400).json({ message: 'Title is required' });
         }
-        const newTask = taskService.createNewTask({ title, description });
+        const newTask = await taskService.createNewTask({ title, description });
         res.status(201).json(newTask);
     } catch (error) {
-        res.status(500).json({ message: 'Error creating task', error });
+        console.error('Error creating task:', error);
+        res.status(500).json({ message: 'Error creating task', error: error.message });
     }
 };
 
 // Handle updating a task
-exports.updateTask = (req, res) => {
+exports.updateTask = async (req, res) => {
     try {
         const { id } = req.params;
         const updates = req.body;
-        const updatedTask = taskService.updateTaskById(id, updates);
+        const updatedTask = await taskService.updateTaskById(id, updates);
         
         if (!updatedTask) {
             return res.status(404).json({ message: 'Task not found' });
         }
         res.status(200).json(updatedTask);
     } catch (error) {
-        res.status(500).json({ message: 'Error updating task', error });
+        console.error('Error updating task:', error);
+        res.status(500).json({ message: 'Error updating task', error: error.message });
     }
 };
 
 // Handle deleting a task
-exports.deleteTask = (req, res) => {
+exports.deleteTask = async (req, res) => {
     try {
         const { id } = req.params;
-        const isDeleted = taskService.deleteTaskById(id);
+        const result = await taskService.deleteTaskById(id);
         
-        if (!isDeleted) {
+        if (!result) {
             return res.status(404).json({ message: 'Task not found' });
         }
         res.status(200).json({ message: 'Task deleted successfully' });
     } catch (error) {
-        res.status(500).json({ message: 'Error deleting task', error });
+        console.error('Error deleting task:', error);
+        res.status(500).json({ message: 'Error deleting task', error: error.message });
     }
 };
