@@ -16,5 +16,8 @@ router.put('/:id', carController.updateCar);
 // DELETE remove a car by ID
 router.delete('/:id', carController.deleteCar);
 
+// GET top 10 fastest cars by top_speed with Efficiency above 170
+router.get('/top-fastest', carController.getTopFastestCars);
+
 module.exports = router;
 

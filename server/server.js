@@ -1,9 +1,12 @@
+// Express is a web framework for Node.js for building APIs
 const express = require('express');
+// Mechanism to allow requests from React (running on a different port)
 const cors = require('cors');
+// Parse incoming JSON requests
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+// Load environment variables
 const customEnv = require('custom-env');
-const taskRoutes = require('./routes/taskRoutes');
 const carRoutes = require('./routes/carRoutes');
 
 const app = express();
@@ -13,7 +16,7 @@ const PORT = 5000;
 const environment = process.env.NODE_ENV || 'default';
 customEnv.env(environment, './config');
 
-// Middleware
+
 // Enable CORS to allow requests from React (running on a different port)
 app.use(cors());
 // Parse incoming JSON requests
@@ -26,22 +29,12 @@ if (connectionString) {
         .then(() => console.log('✅ MongoDB connected'))
         .catch(err => {
             console.error('❌ MongoDB connection error:', err.message);
-            console.warn('⚠️  Server will continue but database operations will fail');
         });
-} else {
-    console.warn('⚠️  CONNECTION_STRING not found in environment variables');
-    console.warn('⚠️  Server will continue but database operations will fail');
 }
 
 // Routes
-// Mount the task routes under /api/tasks
-app.use('/api/tasks', taskRoutes);
 app.use('/api/cars', carRoutes);
 
-// Health Check
-app.get('/', (req, res) => {
-    res.send('Server is up and running');
-});
 
 // Start Server
 app.listen(PORT, () => {
