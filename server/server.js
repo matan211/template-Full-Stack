@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const customEnv = require('custom-env');
 const taskRoutes = require('./routes/taskRoutes');
+const carRoutes = require('./routes/carRoutes');
 
 const app = express();
 const PORT = 5000;
@@ -35,6 +36,7 @@ if (connectionString) {
 // Routes
 // Mount the task routes under /api/tasks
 app.use('/api/tasks', taskRoutes);
+app.use('/api/cars', carRoutes);
 
 // Health Check
 app.get('/', (req, res) => {
