@@ -197,7 +197,7 @@ const CarsPage = () => {
             </div>
 
             {/* Filter Section */}
-            <div style={{ background: '#e9ecef', padding: '15px', borderRadius: '8px', marginBottom: '20px' }}>
+            <div style={{ background: '#e9ecef', padding: '15px', borderRadius: '8px', marginBottom: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <h3 style={{ marginTop: 0 }}>Filter Cars</h3>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px', marginBottom: '10px' }}>
                     <input 
